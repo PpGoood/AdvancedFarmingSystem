@@ -1,0 +1,110 @@
+# =========================================
+# Unreal Engine Project .gitignore
+# by 李沛裕 / GPT-5 优化版
+# =========================================
+
+# 🔹 OS-specific
+.DS_Store
+Thumbs.db
+ehthumbs.db
+Icon?
+desktop.ini
+
+# 🔹 Visual Studio / Rider
+.vscode/
+.idea/
+.vs/
+*.sln
+*.suo
+*.user
+*.userprefs
+*.opensdf
+*.sdf
+*.VC.db
+*.VC.VC.opendb
+
+# 🔹 Unreal Build Files
+Binaries/
+DerivedDataCache/
+Intermediate/
+Saved/
+Script/
+Build/Android/Java/bin/
+Build/Android/Java/gen/
+Build/Android/Java/libs/
+Build/Android/Java/obj/
+Build/Android/Java/src/com/epicgames/
+.vscode/
+.vsconfig
+
+# 🔹 Mac build files
+DerivedDataCacheMac/
+IntermediateMac/
+
+# 🔹 Build Artifacts
+*.xcodeproj
+*.xcworkspace
+*.xcconfig
+*.target
+*.log
+*.tlog
+*.pdb
+*.obj
+*.exe
+*.dll
+*.lib
+*.app
+*.ipa
+
+# 🔹 Unreal auto-generated files
+*.generated.*
+*.gen.*
+*_H.h
+*_C.cpp
+*_PCH.h
+*.generated.h
+
+# 🔹 User-specific
+*.ini.local
+*.ini.bak
+*.tmp
+*.bak
+*.swp
+
+# 🔹 Plugin build caches
+Plugins/*/Binaries/
+Plugins/*/Intermediate/
+Plugins/*/Saved/
+
+# 🔹 Marketplace assets temp data
+__MACOSX/
+*.zip
+*.rar
+*.7z
+
+# 🔹 Engine association metadata
+# （可选保留或忽略）
+Engine/
+Engine/Binaries/
+Engine/Intermediate/
+Engine/Saved/
+
+# 🔹 Optional: exclude local config
+Config/DefaultEditorPerProjectUserSettings.ini
+Config/DefaultEditor.ini
+Config/DefaultEngine.ini.bak
+Config/DefaultInput.ini.bak
+
+# 🔹 Perforce workspace / Source Control temp
+*.p4d
+*.p4ignore
+*.p4config
+
+# 🔹 Ignore backup & cache folders
+Backup/
+Autosaves/
+Collections/
+Saved/Autosaves/
+DerivedDataCache/
+Cache/
+Logs/

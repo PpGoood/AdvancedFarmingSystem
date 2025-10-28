@@ -4,11 +4,19 @@
 #include "Components/ActorComponent.h"
 #include "GenericFSMComponentBase.generated.h"
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnEnumStateChanged, uint8, NewStateValue);
+/** 状态变化委托 */
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnEnumStateChanged, uint8, OldStateValue, uint8, NewStateValue);
+
+/** 状态结构体，包含进入/更新/离开回调 */
+struct FStateCallbacks
+{
+	TFunction<void()> OnEnter;
+	TFunction<void()> OnExit;
+	TFunction<TOptional<uint8>(float DeltaTime)> OnTick;
+};
 
 /**
- * 通用有限状态机基类（非模板）
- * 可以挂在 Actor 上，支持蓝图事件
+ * 通用FSM组件基类
  */
 UCLASS(ClassGroup=(Custom), meta=(BlueprintSpawnableComponent))
 class ADVANCEDFARMINGSYSTEM_API UGenericFSMComponentBase : public UActorComponent
@@ -18,21 +26,36 @@ class ADVANCEDFARMINGSYSTEM_API UGenericFSMComponentBase : public UActorComponen
 public:
 	UGenericFSMComponentBase();
 
-	/** 当前状态值（存储枚举的 uint8） */
+	/** 当前状态 */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="FSM")
 	uint8 CurrentState;
 
-	/** 蓝图可绑定事件：状态切换时触发 */
+	/** 当前状态持续时间（秒） */ // 新增
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="FSM")
+	float StateElapsedTime;
+
+	/** 状态变化事件 */
 	UPROPERTY(BlueprintAssignable, Category="FSM")
 	FOnEnumStateChanged OnStateChanged;
-
-	/** Tick 状态机 */
-	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
 	/** 切换状态 */
 	void SetState(uint8 NewState);
 
+	/** 注册状态 */
+	void RegisterState(uint8 StateValue, const FStateCallbacks& Callbacks);
+
+	/** 获取当前状态持续时间 */ // 新增
+	UFUNCTION(BlueprintCallable, Category="FSM")
+	float GetStateElapsedTime() const { return StateElapsedTime; }
+
 protected:
-	/** 状态回调表，由派生类注册具体枚举状态逻辑 */
-	TMap<uint8, TFunction<TOptional<uint8>(float DeltaTime)>> StateCallbacks;
+	virtual void BeginPlay() override;
+	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
+
+protected:
+	/** 状态表 */
+	TMap<uint8, FStateCallbacks> StateMap;
+
+	/** 是否第一次进入状态 */
+	bool bJustEntered = true;
 };
